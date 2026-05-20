@@ -12,9 +12,9 @@ def main():
 
     shot = pt.System(table=table, balls=balls, cue=cue)
 
-    # Aim at ball "1", hit at 8 m/s, no spin
+    # Aim at ball "1", hit at 4 m/s, no spin
     shot.cue.set_state(
-        V0=8.0,
+        V0=4,
         phi=pt.aim.at_ball(shot, "1"),
         theta=0.0,
         a=0.0,
@@ -26,7 +26,6 @@ def main():
     print("=== Final ball positions ===")
     for ball_id, ball in shot.balls.items():
         x, y, z = ball.xyz
-        print("El value es: ", ball.state)
         # ball.state.s: 0=stationary 1=spinning 2=sliding 3=rolling 4=pocketed
         print(f"  {ball_id:>4s}  x={x:.3f}  y={y:.3f}  pocketed={ball.state.s == pt.constants.pocketed}")
 
@@ -34,7 +33,7 @@ def main():
     print(f"Sim time (s) : {shot.t:.4f}")
 
     # Visualize (comment out in headless training)
-    pt.show(shot)
+    # pt.show(shot)
 
 if __name__ == "__main__":
     main()
