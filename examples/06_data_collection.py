@@ -26,7 +26,7 @@ def _extract_obs(system: pt.System) -> np.ndarray:
         ball = system.balls[bid]
         x, y, _   = ball.xyz
         vx, vy, _ = ball.vel
-        pocketed   = float(ball.state.s == pt.constants.BallState.POCKETED)
+        pocketed   = float(ball.state.s == pt.constants.pocketed)
         obs.extend([x, y, vx, vy, pocketed])
     return np.array(obs, dtype=np.float32)
 
@@ -35,7 +35,7 @@ def _pocketed_count(system: pt.System) -> int:
     return sum(
         1
         for bid, ball in system.balls.items()
-        if bid != "cue" and ball.state.s == pt.constants.BallState.POCKETED
+        if bid != "cue" and ball.state.s == pt.constants.pocketed
     )
 
 

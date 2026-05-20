@@ -17,14 +17,14 @@ def _pocketed_ids(system: pt.System) -> set[str]:
     return {
         bid
         for bid, ball in system.balls.items()
-        if ball.state.s == pt.constants.BallState.POCKETED
+        if ball.state.s == pt.constants.pocketed
     }
 
 
 def _scratch(system: pt.System) -> bool:
     """Cue ball pocketed = scratch."""
     cue = system.balls.get("cue")
-    return cue is not None and cue.state.s == pt.constants.BallState.POCKETED
+    return cue is not None and cue.state.s == pt.constants.pocketed
 
 
 # --- A. Sparse reward ---

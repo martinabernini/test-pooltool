@@ -28,7 +28,7 @@ def extract_observation(system: pt.System) -> np.ndarray:
         ball = system.balls[bid]
         x, y, _ = ball.xyz
         vx, vy, _ = ball.vel
-        pocketed = float(ball.state.s == pt.constants.BallState.POCKETED)
+        pocketed = float(ball.state.s == pt.constants.pocketed)
         obs.extend([x, y, vx, vy, pocketed])
     return np.array(obs, dtype=np.float32)
 

@@ -33,9 +33,7 @@ class BilliardEnv(gym.Env):
         self.max_steps = max_steps
         self._step = 0
         self._system: pt.System | None = None
-        self._viewer: pt.ShotViewer | None = None
-
-        # [V0, phi, theta, b]
+            # [V0, phi, theta, b]
         low  = np.array([0.5,   0.0, 0.0, -0.5], dtype=np.float32)
         high = np.array([10.0, 360.0, 60.0,  0.5], dtype=np.float32)
         self.action_space = spaces.Box(low=low, high=high, dtype=np.float32)
@@ -80,12 +78,10 @@ class BilliardEnv(gym.Env):
 
     # ------------------------------------------------------------------
     def render(self):
-        if self._viewer is None:
-            self._viewer = pt.ShotViewer()
-        self._viewer.show(self._system)
+        pt.show(self._system)
 
     def close(self):
-        self._viewer = None
+        pass
 
     # ------------------------------------------------------------------
     # Internal helpers
@@ -100,7 +96,7 @@ class BilliardEnv(gym.Env):
             ball = self._system.balls[bid]
             x, y, _   = ball.xyz
             vx, vy, _ = ball.vel
-            pocketed   = float(ball.state.s == pt.constants.BallState.POCKETED)
+            pocketed   = float(ball.state.s == pt.constants.pocketed)
             obs.extend([x, y, vx, vy, pocketed])
         return np.array(obs, dtype=np.float32)
 
@@ -108,16 +104,16 @@ class BilliardEnv(gym.Env):
         return {
             bid
             for bid, ball in self._system.balls.items()
-            if ball.state.s == pt.constants.BallState.POCKETED
+            if ball.state.s == pt.constants.pocketed
         }
 
     def _scratch(self) -> bool:
         cue = self._system.balls.get("cue")
-        return cue is not None and cue.state.s == pt.constants.BallState.POCKETED
+        return cue is not None and cue.state.s == pt.constants.pocketed
 
     def _all_pocketed(self) -> bool:
         return all(
-            self._system.balls[bid].state.s == pt.constants.BallState.POCKETED
+            self._system.balls[bid].state.s == pt.constants.pocketed
             for bid in BALL_ORDER
             if bid != "cue" and bid in self._system.balls
         )
@@ -126,7 +122,7 @@ class BilliardEnv(gym.Env):
         pocketed_before = {
             bid
             for bid, ball in system_before.balls.items()
-            if ball.state.s == pt.constants.BallState.POCKETED and bid != "cue"
+            if ball.state.s == pt.constants.pocketed and bid != "cue"
         }
         new_pocketed = self._pocketed_ids() - pocketed_before - {"cue"}
         reward = float(len(new_pocketed))
